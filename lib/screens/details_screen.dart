@@ -148,8 +148,9 @@ class EnrollBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth <= 360 ? 15 : 30),
       child: Row(
         children: [
           CustomIconButton(
@@ -162,17 +163,17 @@ class EnrollBottomSheet extends StatelessWidget {
             width: 45,
             onTap: () {},
           ),
-          const SizedBox(
-            width: 20,
+          SizedBox(
+            width: screenWidth <= 360 ? 10 : 20,
           ),
           Expanded(
             child: CustomIconButton(
               color: kPrimaryColor,
-              child: const Text(
+              child: Text(
                 'Enroll Now',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: screenWidth <= 360 ? 16 : 18,
                 ),
               ),
               height: 45,
@@ -204,14 +205,16 @@ class _CustomTabViewState extends State<CustomTabView> {
   final List<String> _tags = ["Playlist (22)", "Description"];
 
   Widget _buildTags(int index) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         widget.changeTab(index);
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * .08,
-          vertical: 15,
+          horizontal:
+              screenWidth <= 360 ? 15 : MediaQuery.of(context).size.width * .08,
+          vertical: screenWidth <= 360 ? 10 : 15,
         ),
         decoration: BoxDecoration(
           color: widget.index == index ? kPrimaryColor : null,
@@ -220,7 +223,9 @@ class _CustomTabViewState extends State<CustomTabView> {
         child: Text(
           _tags[index],
           style: TextStyle(
-              color: widget.index != index ? Colors.black : Colors.white),
+            color: widget.index != index ? Colors.black : Colors.white,
+            fontSize: screenWidth <= 360 ? 14 : 16,
+          ),
         ),
       ),
     );
@@ -229,13 +234,15 @@ class _CustomTabViewState extends State<CustomTabView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding:
+          EdgeInsets.all(MediaQuery.of(context).size.width <= 360 ? 10 : 20),
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.grey.shade200,
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: _tags
             .asMap()
             .entries

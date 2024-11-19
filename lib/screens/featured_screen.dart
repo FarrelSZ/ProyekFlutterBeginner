@@ -19,11 +19,13 @@ class _FeaturedScreenState extends State<FeaturedScreen> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        body: Column(
-          children: const [
-            AppBar(),
-            Body(),
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            children: const [
+              AppBar(),
+              Body(),
+            ],
+          ),
         ),
       ),
     );
@@ -35,6 +37,8 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Column(
       children: <Widget>[
         Padding(
@@ -42,8 +46,10 @@ class Body extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Explore Categories',
-                  style: Theme.of(context).textTheme.bodyMedium),
+              Expanded(
+                child: Text('Explore Categories',
+                    style: Theme.of(context).textTheme.bodyMedium),
+              ),
               TextButton(
                 onPressed: () {},
                 child: Text(
@@ -58,16 +64,17 @@ class Body extends StatelessWidget {
         ),
         GridView.builder(
           shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: categoryList.length,
           padding: const EdgeInsets.symmetric(
             horizontal: 20,
             vertical: 8,
           ),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.8,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 24,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: screenWidth <= 360 ? 1 : 2, // Breakpoint di 360px
+            childAspectRatio: screenWidth <= 360 ? 1.5 : 0.8,
+            crossAxisSpacing: screenWidth <= 360 ? 10 : 20,
+            mainAxisSpacing: screenWidth <= 360 ? 15 : 24,
           ),
           itemBuilder: (context, index) {
             return CategoryCard(
@@ -107,9 +114,11 @@ class AppBar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  'Hello, \nGood Morning',
-                  style: Theme.of(context).textTheme.titleLarge,
+                Expanded(
+                  child: Text(
+                    'Hello, \nGood Morning',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ),
                 CircleButton(
                   icon: Icons.notifications,
