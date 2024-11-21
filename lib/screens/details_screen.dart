@@ -26,14 +26,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
+            padding: EdgeInsets.symmetric(
+              horizontal: screenWidth <= 360
+                  ? 10
+                  : 20, // Kurangi padding untuk layar kecil
               vertical: 10,
             ),
             child: Column(
@@ -45,7 +49,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       Align(
                         child: Text(
                           'Flutter',
-                          style: Theme.of(context).textTheme.displayMedium,
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMedium
+                              ?.copyWith(
+                                fontSize: screenWidth <= 360
+                                    ? 24
+                                    : null, // Sesuaikan ukuran font
+                              ),
                         ),
                       ),
                       Positioned(
@@ -59,15 +70,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 25,
-                ),
+                const SizedBox(height: 25),
                 const CustomVideoPlayer(),
-                const Text(
+                const SizedBox(height: 10),
+                Text(
                   'Fluter',
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
-                    fontSize: 18,
+                    fontSize: screenWidth <= 360 ? 16 : 18,
                   ),
                 ),
                 const SizedBox(
@@ -82,35 +92,47 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 const SizedBox(
                   height: 3,
                 ),
-                Row(
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    Image.asset(
-                      icFeaturedOutlined,
-                      height: 20,
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          icFeaturedOutlined,
+                          height: 20,
+                        ),
+                        const Text(
+                          '4.8',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
-                    const Text(
-                      '4.8',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                      ),
+                    const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.timer,
+                          color: Colors.grey,
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          '65 Hours',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Icon(
-                      Icons.timer,
-                      color: Colors.grey,
-                    ),
-                    const Text(
-                      '65 Hours',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const Spacer(),
+                    // const Spacer(),
                     const Text(
                       "\$55",
                       style: TextStyle(
@@ -127,6 +149,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   changeTab: changeTab,
                 ),
                 _selectedTag == 0 ? const Playlist() : const Description(),
+                const SizedBox(height: 80),
               ],
             ),
           ),
@@ -213,7 +236,7 @@ class _CustomTabViewState extends State<CustomTabView> {
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal:
-              screenWidth <= 360 ? 15 : MediaQuery.of(context).size.width * .08,
+              screenWidth <= 405 ? 10 : MediaQuery.of(context).size.width * .08,
           vertical: screenWidth <= 360 ? 10 : 15,
         ),
         decoration: BoxDecoration(
