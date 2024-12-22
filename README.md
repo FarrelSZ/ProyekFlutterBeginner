@@ -48,8 +48,6 @@ lib/
 |-- screens/          # UI screens
 |-- widgets/          # Reusable UI components
 |-- models/           # Data models
-|-- providers/        # State management
-|-- services/         # Dummy data and services
 ```
 
 ## Contributing
